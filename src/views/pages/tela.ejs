@@ -1,0 +1,58 @@
+<html lang="en">
+  <%- include ('../layout/layout') %>
+  <body class="container">
+    <main id="contenedor" data-id="<%= tela._id %> " class="container"></main>
+    <button
+      type="button"
+      class="btn btn-primary mt-3 ms-3"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+    >
+      Agregar imagen
+    </button>
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Agregar productos
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex justify-content-center align-items-center"
+          >
+            <form enctype="multipart/form-data" id="formImg">
+              <div class="custom-file mb-3">
+                <label for="inputGroupFile01" class="form-label"
+                  >Agregar imagenes</label
+                >
+                <input
+                  type="file"
+                  name="images"
+                  class="form-control"
+                  id="inputGroupFile01"
+                />
+              </div>
+              <button class="btn btn-success" data-bs-dismiss="modal">
+                Enviar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/update.js"></script>
+  </body>
+</html>
