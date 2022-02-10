@@ -8,7 +8,7 @@ require('dotenv').config()
 
 //Variables
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 //Cors
 app.use(cors())
@@ -46,8 +46,8 @@ app.use('/admin', require('./routes/admin'));
 app.use('/upload', require('./routes/cloudinary'));
 
 //Server
-const server = app.listen(PORT, () => {
-  console.log(`Server en http://localhost:${PORT}`);
+const server = app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server en http://localhost:${server.address().port}`);
 });
 
 //Error
