@@ -1,57 +1,212 @@
 <html lang="en">
   <%- include ('../layout/layout') %>
-  <body class="container">
-    <main id="contenedor" data-id="<%= tela._id %> " class="container"></main>
-    <button
-      type="button"
-      class="btn btn-primary mt-3 ms-3"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-    >
-      Agregar imagen
-    </button>
+  <body>
     <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
+      class="d-none d-flex flex-column justify-content-center align-items-center h-100"
+      id="loader"
     >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Agregar productos
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div
-            class="modal-body d-flex justify-content-center align-items-center"
-          >
-            <form enctype="multipart/form-data" id="formImg">
-              <div class="custom-file mb-3">
-                <label for="inputGroupFile01" class="form-label"
-                  >Agregar imagenes</label
-                >
-                <input
-                  type="file"
-                  name="images"
-                  class="form-control"
-                  id="inputGroupFile01"
-                />
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h1 class="mt-2">Cargando...</h1>
+    </div>
+    <div id="body">
+      <header
+        class="navbar navbar-expand d-flex justify-content-center align-items-center"
+      >
+        <button class="btn btn-success me-5 btn-back">
+          <a class="text-decoration-none text-light" href="/admin">Volver</a>
+        </button>
+        <h1 class="p-4 text-underline">Detalle del producto</h1>
+      </header>
+      <main class="container p-3">
+        <section
+          id="contenedor"
+          data-id="<%= tela._id %> "
+          class="container"
+        ></section>
+        <div
+          class="modal fade"
+          id="modal-nombre"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Editar nombre
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
-              <button class="btn btn-success" data-bs-dismiss="modal">
-                Enviar
-              </button>
-            </form>
+              <div class="modal-body">
+                <form id="form-text">
+                  <label for="nombre" class="form-label">Nombre</label>
+                  <input
+                    id="nombre"
+                    class="form-control"
+                    type="text"
+                    placeholder="Nombre"
+                    value="<%= tela.nombre %> "
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-success mt-3"
+                    data-bs-dismiss="modal"
+                  >
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+        <div
+          class="modal fade"
+          id="modal-comp"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Editar composición
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="form-text">
+                  <label for="comp" class="form-label">Composición</label>
+                  <input
+                    id="comp"
+                    class="form-control"
+                    type="text"
+                    placeholder="Composición"
+                    value="<%= tela.comp %> "
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-success mt-3"
+                    data-bs-dismiss="modal"
+                  >
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="modal-desc"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Editar descripción
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="form-text">
+                  <label for="desc" class="form-label">Descripción</label>
+                  <input
+                    id="desc"
+                    class="form-control"
+                    type="text"
+                    placeholder="Descripción"
+                    value="<%= tela.desc %> "
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-success mt-3"
+                    data-bs-dismiss="modal"
+                  >
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary mt-3 ms-3"
+          data-bs-toggle="modal"
+          data-bs-target="#modal-img"
+        >
+          Agregar imagen
+        </button>
+        <div
+          class="modal fade"
+          id="modal-img"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Agregar imagen
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div
+                class="modal-body d-flex justify-content-center align-items-center"
+              >
+                <form enctype="multipart/form-data" id="formImg">
+                  <div class="custom-file mb-3">
+                    <label for="inputGroupFile01" class="form-label"
+                      >Imagen</label
+                    >
+                    <input
+                      type="file"
+                      name="images"
+                      class="form-control"
+                      id="inputGroupFile01"
+                    />
+                  </div>
+                  <button
+                    class="btn btn-success"
+                    type="submit"
+                    data-bs-dismiss="modal"
+                  >
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
     <script src="/js/update.js"></script>
   </body>

@@ -1,39 +1,21 @@
 const Tela = require("../models/Tela")
-const cloudinary = require('cloudinary').v2
-const fs = require('fs-extra');
 
 const createProduct = async (req, res) => {
-  const {nombre, comp, desc} = req.body;
-
-  const urls = [];
-
-  const upload = req.files.map( file => {
-    return cloudinary.uploader.upload(file.path);
-  });
-
-  const imgs = await Promise.all(upload);
-
-  for(img of imgs) {
-    urls.push(img.url)
-  }
-
-  const tela = new Tela({
-    nombre,
-    comp,
-    desc,
-    imagenes: urls
-  });
+  
+  const tela =  new Tela(req.body)
 
   try {
     await tela.save();
-    await req.files.map( file => fs.unlink(file.path) )
-    res.redirect('/admin')
+    res.json({
+      ok: true,
+      tela
+    })
   } catch (err) {
     res.status(500).json({
       error: true,
       msg: err
     });
-  };
+  }
 
 };
 
@@ -66,7 +48,7 @@ const updateProduct = async (req, res) => {
   const {id} = req.params;
 
   try {
-    await Tela.findByIdAndUpdate({_id: id}, req.body, {new: true});
+    await Tela.findByIdAndUpdate(id, req.body, {new: true});
     res.json({ok: true, id})
   } catch (err) {
     res.status(500).json({
@@ -83,10 +65,18 @@ const updateProductImg = async (req, res) => {
   const {newImg} = req.body;
 
   const {imagenes}  = await Tela.findById(id)
+
+  if(imagenes.length === 3) {
+    return res.status(404).json({
+      ok: false,
+      msg: 'El maximo es de 3 imagenes'
+    });
+  }
+
   imagenes.push(newImg)
 
   try {
-    await Tela.findByIdAndUpdate({_id: id}, {imagenes}, {new: true});
+    await Tela.findByIdAndUpdate(id, {imagenes}, {new: true});
     res.json({ok: true, id})
   } catch (err) {
     res.status(500).json({

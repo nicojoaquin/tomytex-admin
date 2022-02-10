@@ -47,7 +47,7 @@ app.use('/upload', require('./routes/cloudinary'));
 
 //Server
 const server = app.listen(PORT, () => {
-  console.log(`Server en ${PORT}`);
+  console.log(`Server en http://localhost:${PORT}`);
 });
 
 //Error

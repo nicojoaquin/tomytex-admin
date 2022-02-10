@@ -1,48 +1,132 @@
 const contenedor = document.querySelector('#contenedor');
 const deleteImgBtn = document.getElementsByClassName('container')[0];
+const body = document.querySelector('#body');
+const loader = document.querySelector('#loader')
+
+const startLoad = () => {
+  body.classList.add('d-none');
+  loader.classList.remove('d-none');
+}
+
+const stopLoad = () => {
+  loader.classList.add('d-none');
+  body.classList.remove('d-none');
+}
 
 const ID = contenedor.dataset.id
 
 //Obtener el producto y desplegarlo
 const getProduct = async () => {
-  const res = await fetch(`/api/tela/${ID}`);
-  const {tela} = await res.json();
 
-  contenedor.innerHTML = 
-  `
-    <div class="mt-3">
-      <h2>Artículo: ${tela.nombre}</h2>
-    </div>
-    <hr />
-    <article>
-      <div id="delete-img" data-id=${tela._id}>
-        <h3>Imagenes</h3>
-        <div class="grid">
+  try {
+    startLoad();
+    const res = await fetch(`/api/tela/${ID}`);
+    const {tela} = await res.json();
+
+    contenedor.innerHTML = 
+      `
+        <div class="mt-3">
+          <h2>Artículo: ${tela.nombre}</h2>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-nombre">Editar nombre</button>
         </div>
-      </div>
-    </article>
-  `
-  tela.imagenes.map( img => {
-    document.querySelector('.grid').innerHTML += 
-    `
-      <div class="me-3 mt-3 card">
-        <img
-          src=${img}
-          alt=${tela.nombre}
-          class="card-img-top imgs"
-        />
-        <div class="card-body">
-          <button class="btn btn-danger mt-3" data-img="${img}">
-            X
-          </button>
+        <hr />
+        <section>
+          <div>
+            <h3>Composición:</h3>
+            <p class="fw-normal fs-5">${tela.comp}</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-comp">Editar composición</button>
+          </div>
+          <hr />
+          <div>
+            <h3>Descripción</h3>
+            <p class="fw-light tela-desc">${tela.desc}</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-desc">Editar descripción</button>
+          </div>
+        </section>
+        <hr />
+        <article>
+          <div id="delete-img" data-id=${tela._id}>
+            <h3>Imagenes</h3>
+            <div class="grid">
+            </div>
+          </div>
+        </article>
+      `
+    tela.imagenes.map( img => {
+      document.querySelector('.grid').innerHTML += 
+      `
+        <div class="me-3 mt-3 card">
+          <img
+            src=${img}
+            alt=${tela.nombre}
+            class="card-img-top imgs"
+          />
+          <div class="card-body">
+            <button class="btn btn-danger mt-3" data-img="${img}">
+              X
+            </button>
+          </div>
         </div>
-      </div>
-    `
-  })
-  return tela.imagenes;
+      `
+    })
+
+    return tela;
+    
+  } catch (err) {
+    console.warn(err);
+  } finally {
+    stopLoad();
+  }
+  
 }
 
 window.onload = getProduct();
+
+const formText = document.querySelectorAll("#form-text");
+
+const updateText = async (e) => {
+  e.preventDefault()
+  const {nombre, desc, comp, imagenes} = await getProduct()
+
+  const nombreValue = document.querySelector('#nombre');
+  const compValue = document.querySelector('#comp');
+  const descValue = document.querySelector('#desc');
+
+  const productToUpdate = {
+    nombre: nombreValue.value ?? nombre,
+    desc: descValue.value ?? desc,
+    comp: compValue.value ?? comp,
+    imagenes
+  }
+
+  try {
+    startLoad();
+    const res = await fetch(`/admin/${ID}`, {
+      method: "put",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(productToUpdate)
+    });
+    const data = await res.json();
+    if (data.ok) {
+      getProduct();
+    } else {
+      alert(data.msg)
+    }
+    
+  } catch (err) {
+    console.warn(err);
+  } finally {
+    stopLoad();
+  }
+
+}
+
+formText.forEach(form => {
+  form.addEventListener('submit', updateText);
+});
+
 
 //Eliminar imagenes del producto
 deleteImgBtn?.addEventListener('click', async (e) => {
@@ -52,10 +136,11 @@ deleteImgBtn?.addEventListener('click', async (e) => {
   if(btn.classList.contains('btn-danger')) {
 
     const imagen = btn.dataset.img;
-    const imagenes = await getProduct();
+    const {imagenes} = await getProduct();
     const imagenesFiltradas = imagenes.filter( img => img !== imagen)
 
     try { 
+      startLoad();
       const res = await fetch(`/admin/${ID}`, {
         method: "put",
         headers: {
@@ -66,10 +151,14 @@ deleteImgBtn?.addEventListener('click', async (e) => {
       const data = await res.json();
       if (data.ok) {
         getProduct();
+      } else {
+        alert(data.msg)
       }
     } catch (err) {
         console.warn(err);
-    };
+    } finally {
+      stopLoad();
+    }
 
   }
 
@@ -78,15 +167,16 @@ deleteImgBtn?.addEventListener('click', async (e) => {
 
 //Agregar una nueva imagen al producto
 const formImg = document.querySelector('#formImg');
-const img1 = document.querySelector("#inputGroupFile01");
+const img = document.querySelector("#inputGroupFile01");
 
 formImg.addEventListener('submit', async (e) => {
   e.preventDefault()
   let newImg;
   const formData = new FormData();
-  formData.append('images', img1.files[0]);
+  formData.append('images', img.files[0]);
 
   try {
+    startLoad();
     const res = await fetch('/upload', {
     method:'POST',
     body: formData
@@ -108,10 +198,14 @@ formImg.addEventListener('submit', async (e) => {
     const data = await res.json();
     if (data.ok) {
       getProduct();
+    } else {
+      alert(data.msg)
     }
   } catch (err) {
       console.warn(err);
-  };
+  } finally {
+    stopLoad();
+  }
 
 
 })

@@ -1,9 +1,20 @@
 <html lang="en">
   <%- include ('../layout/layout') %>
   <body>
-    <main class="d-flex flex-column align-items-center">
-      <div class="d-flex flex-wrap justify-content-evenly align-items-center">
-        <h1 class="mt-3 me-3 mb-3">Panel de administración</h1>
+    <div
+      class="d-none d-flex flex-column justify-content-center align-items-center h-100"
+      id="loader"
+    >
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h1 class="mt-2">Cargando...</h1>
+    </div>
+    <div id="body">
+      <header
+        class="navbar navbar-expand d-flex flex-wrap justify-content-center align-items-center"
+      >
+        <h1 class="p-4 me-3">Panel de administración</h1>
         <button
           type="button"
           class="btn btn-primary ms-3"
@@ -12,142 +23,131 @@
         >
           Agregar producto
         </button>
-      </div>
-      <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Agregar productos
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div
-              class="modal-body d-flex justify-content-center align-items-center"
-            >
-              <form action="/admin" method="POST" enctype="multipart/form-data">
-                <div class="form-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="nombre"
-                    placeholder="Nombre"
-                  />
-                </div>
-                <div class="form-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="comp"
-                    placeholder="Composición"
-                  />
-                </div>
-                <div class="form-group mb-3">
-                  <textarea
-                    name="desc"
-                    class="form-control"
-                    placeholder="Descripción"
-                  ></textarea>
-                </div>
-                <div class="custom-file mb-3">
-                  <label for="inputGroupFile01" class="form-label"
-                    >Agrega hasta 3 imagenes</label
-                  >
-                  <input
-                    type="file"
-                    name="images"
-                    class="form-control"
-                    id="inputGroupFile01"
-                    list
-                  />
-                  <input
-                    type="file"
-                    name="images"
-                    class="form-control mt-3"
-                    id="inputGroupFile01"
-                    list
-                  />
-                  <input
-                    type="file"
-                    name="images"
-                    class="form-control mt-3"
-                    id="inputGroupFile01"
-                    list
-                  />
-                </div>
-                <button type="submit" class="btn btn-success w-100">
-                  Enviar
-                </button>
-              </form>
+      </header>
+      <main class="d-flex flex-column align-items-center">
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Agregar productos
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div
+                class="modal-body d-flex justify-content-center align-items-center"
+              >
+                <form id="form-add" enctype="multipart/form-data" class="w-100">
+                  <div class="form-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="nombre"
+                      placeholder="Nombre"
+                    />
+                  </div>
+                  <div class="form-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="comp"
+                      placeholder="Composición"
+                    />
+                  </div>
+                  <div class="form-group mb-3">
+                    <textarea
+                      id="desc"
+                      class="form-control"
+                      placeholder="Descripción"
+                    ></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-success w-100">
+                    Enviar
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="container mt-5">
-        <h2 class="mb-3">Lista de productos</h2>
-        <hr />
-        <% if (telas.length > 0) { %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Composición</th>
-              <th scope="col">Editar</th>
-              <th scope="col">Eliminar</th>
-            </tr>
-          </thead>
-          <tbody id="productsContainer">
-            <% telas.forEach(tela => { %>
-            <tr>
-              <td>
-                <img
-                  width="60"
-                  src="<%= tela.imagenes[0] %>"
-                  alt="<%= tela.nombre %>"
-                  class="rounded-circle"
-                />
-              </td>
-              <th scope="row" class="'p-0"><%= tela.nombre %></th>
-              <td><%= tela.comp %></td>
-              <td>
-                <a href="/admin/tela/<%= tela._id %>"
-                  ><button class="btn btn-primary" id="editarBtn">
-                    <i class="bi bi-pencil-fill"></i></button
-                ></a>
-              </td>
-              <td>
-                <button class="btn btn-danger" data-id="<%=tela._id %>">
-                  <i
-                    class="bi bi-trash-fill"
-                    id="eliminarBtn"
-                    data-id="<%= tela._id %>"
-                  ></i>
-                </button>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-        <% } else { %>
-        <h2 class="alert alert-danger text-center">
-          No hay productos para mostrar
-        </h2>
-        <% } %>
-      </div>
-    </main>
+        <div class="container mt-5">
+          <h2 class="mb-3">Lista de productos</h2>
+          <hr />
+          <% if (telas.length > 0) { %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Composición</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody id="productsContainer">
+              <% telas.forEach(tela => { %>
+              <tr>
+                <td>
+                  <% if (tela.imagenes.length > 0) { %>
+                  <img
+                    width="60"
+                    height="50"
+                    src="<%= tela.imagenes[0] %>"
+                    alt="<%= tela.nombre %>"
+                    class="rounded-circle"
+                    style="object-fit: cover"
+                  />
+                  <% } else { %>
+                  <img
+                    width="60"
+                    height="50"
+                    src="/img/assets/desconocido.jpg"
+                    alt="desconocido"
+                    class="rounded-circle"
+                    style="object-fit: cover"
+                  />
+                  <% } %>
+                </td>
+                <th scope="row" class="'p-0"><%= tela.nombre %></th>
+                <td><%= tela.comp %></td>
+                <td>
+                  <a href="/admin/tela/<%= tela._id %>"
+                    ><button class="btn btn-primary" id="editarBtn">
+                      <i class="bi bi-pencil-fill"></i></button
+                  ></a>
+                </td>
+                <td>
+                  <button class="btn btn-danger" data-id="<%=tela._id %>">
+                    <i
+                      class="bi bi-trash-fill"
+                      id="eliminarBtn"
+                      data-id="<%= tela._id %>"
+                    ></i>
+                  </button>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <h2 class="alert alert-danger text-center">
+            No hay productos para mostrar
+          </h2>
+          <% } %>
+        </div>
+      </main>
+    </div>
     <script src="/js/delete.js"></script>
   </body>
 </html>

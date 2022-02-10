@@ -4,9 +4,18 @@ body {
   padding: 0;
 }
 
+header {
+  background-color: rgba(201, 197, 197, 0.8);
+}
+
+header h1 {
+  color: rgb(39, 39, 38);
+}
+
 .imgs {
   height: 300px;
   border-radius: 5px;
+  object-fit: cover;
 }
 
 .grid {
@@ -21,5 +30,38 @@ body {
 @media (max-width: 766px) {
   .grid {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 766px) {
+  .table {
+    font-size: 70%;
+  }
+}
+
+@media (min-width: 370px) and (max-width: 650px) {
+  .btn-back {
+    margin-left: 2rem;
+  }
+}
+@media (max-width: 350px) {
+  .table {
+    font-size: 55%;
+  }
+  .table img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .table button {
+    font-size: 55%;
+  }
+  .btn-back {
+    margin-left: 0.2rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .tela-desc {
+    width: 70%;
   }
 }

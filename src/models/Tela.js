@@ -19,7 +19,12 @@ const TelasSchema = new Schema(
       required: true
     },
 
-    imagenes: Array
+    imagenes: {
+      type: [{
+        type: String
+      }],
+      validate: [ val => val.length <= 3, 'Solo se puede agregar hasta 3 imagenes']
+    }
   },
   {
     timestamps: true,
