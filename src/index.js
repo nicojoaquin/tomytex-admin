@@ -4,11 +4,10 @@ const { dbConnection } = require('./config/db');
 const path = require('path');
 const multer = require('multer');
 const cloudinaryConfig = require('./config/cloudinary');
-require('dotenv').config()
+require('dotenv').config();
 
 //Variables
 const app = express();
-const PORT = process.env.PORT;
 
 //Cors
 app.use(cors())
@@ -43,7 +42,6 @@ cloudinaryConfig();
 //Routes
 app.use('/api', require('./routes/telas'));
 app.use('/admin', require('./routes/admin'));
-app.use('/upload', require('./routes/cloudinary'));
 
 //Server
 const server = app.listen(process.env.PORT || 5000, () => {

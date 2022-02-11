@@ -3,11 +3,13 @@ const deleteImgBtn = document.getElementsByClassName('container')[0];
 const body = document.querySelector('#body');
 const loader = document.querySelector('#loader')
 
+//Loader spinner empieza
 const startLoad = () => {
   body.classList.add('d-none');
   loader.classList.remove('d-none');
 }
 
+//Loader spinner termina
 const stopLoad = () => {
   loader.classList.add('d-none');
   body.classList.remove('d-none');
@@ -57,12 +59,12 @@ const getProduct = async () => {
       `
         <div class="me-3 mt-3 card">
           <img
-            src=${img}
+            src=${img.url}
             alt=${tela.nombre}
             class="card-img-top imgs"
           />
           <div class="card-body">
-            <button class="btn btn-danger mt-3" data-img="${img}">
+            <button class="btn btn-danger mt-3" data-img="${img.public_id}">
               X
             </button>
           </div>
@@ -84,6 +86,7 @@ window.onload = getProduct();
 
 const formText = document.querySelectorAll("#form-text");
 
+//Editar el nombre, la composición y la descripción
 const updateText = async (e) => {
   e.preventDefault()
   const {nombre, desc, comp, imagenes} = await getProduct()
@@ -135,9 +138,10 @@ deleteImgBtn?.addEventListener('click', async (e) => {
   
   if(btn.classList.contains('btn-danger')) {
 
-    const imagen = btn.dataset.img;
+    const imagenUrl = btn.dataset.img;
     const {imagenes} = await getProduct();
-    const imagenesFiltradas = imagenes.filter( img => img !== imagen)
+    
+    const imagen = imagenes.find( img => img.public_id === imagenUrl );
 
     try { 
       startLoad();
@@ -146,7 +150,7 @@ deleteImgBtn?.addEventListener('click', async (e) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({imagenes: imagenesFiltradas})
+        body: JSON.stringify({imagen})
       });
       const data = await res.json();
       if (data.ok) {
@@ -171,29 +175,15 @@ const img = document.querySelector("#inputGroupFile01");
 
 formImg.addEventListener('submit', async (e) => {
   e.preventDefault()
-  let newImg;
+
   const formData = new FormData();
   formData.append('images', img.files[0]);
-
-  try {
-    startLoad();
-    const res = await fetch('/upload', {
-    method:'POST',
-    body: formData
-    })
-    const {url} = await res.json();
-    newImg = url;
-  } catch (err) {
-      console.warn(err);
-  }
-
+  
   try { 
+    startLoad();
     const res = await fetch(`/admin/upload/${ID}`, {
       method: "put",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({newImg})
+      body: formData
     });
     const data = await res.json();
     if (data.ok) {
@@ -206,7 +196,6 @@ formImg.addEventListener('submit', async (e) => {
   } finally {
     stopLoad();
   }
-
 
 })
 

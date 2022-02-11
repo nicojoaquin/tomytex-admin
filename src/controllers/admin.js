@@ -1,4 +1,6 @@
 const Tela = require("../models/Tela")
+const cloudinary = require('cloudinary').v2
+const fs = require('fs-extra');
 
 const createProduct = async (req, res) => {
   
@@ -46,9 +48,29 @@ const readProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
 
   const {id} = req.params;
+  const {imagen} = req.body
+
+  const {imagenes} = await Tela.findById(id);
+  
+  let newImgs;
+  
+  if(imagen) {
+    await cloudinary.uploader.destroy(imagen.public_id);
+    newImgs = imagenes?.filter( img => img.public_id !== imagen.public_id );
+  }
 
   try {
-    await Tela.findByIdAndUpdate(id, req.body, {new: true});
+    await Tela.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        imagenes: newImgs
+      },
+      {
+      new: true
+      }
+    );
+
     res.json({ok: true, id})
   } catch (err) {
     res.status(500).json({
@@ -62,7 +84,8 @@ const updateProduct = async (req, res) => {
 const updateProductImg = async (req, res) => {
 
   const {id} = req.params;
-  const {newImg} = req.body;
+  const img = req.files[0];
+  const {url, public_id} = await cloudinary.uploader.upload(img.path);
 
   const {imagenes}  = await Tela.findById(id)
 
@@ -73,10 +96,11 @@ const updateProductImg = async (req, res) => {
     });
   }
 
-  imagenes.push(newImg)
+  imagenes.push({url, public_id})
 
   try {
     await Tela.findByIdAndUpdate(id, {imagenes}, {new: true});
+    await fs.unlink(req.files[0].path)
     res.json({ok: true, id})
   } catch (err) {
     res.status(500).json({
@@ -90,6 +114,13 @@ const updateProductImg = async (req, res) => {
 const deleteProduct = async (req, res) => {
 
   const {id} = req.params
+  const {imagenes} = await Tela.findById(id);
+
+  const deleteImgs = imagenes.map( img => {
+    cloudinary.uploader.destroy(img.public_id)
+  });
+
+  await Promise.all(deleteImgs);
 
   try {
     await Tela.findByIdAndDelete({_id: id});

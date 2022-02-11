@@ -21,7 +21,8 @@ const TelasSchema = new Schema(
 
     imagenes: {
       type: [{
-        type: String
+        url: String,
+        public_id: String
       }],
       validate: [ val => val.length <= 3, 'Solo se puede agregar hasta 3 imagenes']
     }
