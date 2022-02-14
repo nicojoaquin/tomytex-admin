@@ -85,9 +85,15 @@ const updateProductImg = async (req, res) => {
 
   const {id} = req.params;
   const img = req.files[0];
-  const {url, public_id} = await cloudinary.uploader.upload(img.path);
 
   const {imagenes}  = await Tela.findById(id)
+
+  if(!img) {
+    return res.status(404).json({
+      ok: false,
+      msg: 'Por favor inserte una imagen'
+    })
+  }
 
   if(imagenes.length === 3) {
     return res.status(404).json({
@@ -96,6 +102,7 @@ const updateProductImg = async (req, res) => {
     });
   }
 
+  const {url, public_id} = await cloudinary.uploader.upload(img.path);
   imagenes.push({url, public_id})
 
   try {
