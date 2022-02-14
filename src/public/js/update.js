@@ -29,20 +29,20 @@ const getProduct = async () => {
       `
         <div class="mt-3">
           <h2>Artículo: ${tela.nombre}</h2>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-nombre">Editar nombre</button>
+          <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-nombre">Editar nombre</button>
         </div>
         <hr />
         <section>
           <div>
             <h3>Composición:</h3>
             <p class="fw-normal fs-5">${tela.comp}</p>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-comp">Editar composición</button>
+            <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-comp">Editar composición</button>
           </div>
           <hr />
           <div>
             <h3>Descripción</h3>
             <p class="fw-light tela-desc">${tela.desc}</p>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-desc">Editar descripción</button>
+            <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-desc">Editar descripción</button>
           </div>
         </section>
         <hr />

@@ -4,12 +4,43 @@ body {
   padding: 0;
 }
 
+.color-principal {
+  background-color: rgb(56, 56, 212);
+  color: #fff;
+}
+.color-principal:hover {
+  filter: brightness(80%);
+  color: #fff;
+}
+
+.buttons {
+  padding: 0.6rem;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border: none;
+  color: #fff;
+}
+.buttons:hover {
+  filter: brightness(90%);
+  color: #fff;
+}
+
+.btn-back {
+  background-color: rgb(100, 96, 96);
+}
+
 header {
   background-color: rgba(201, 197, 197, 0.8);
 }
 
 header h1 {
   color: rgb(39, 39, 38);
+}
+
+@media (min-width: 992px) {
+  .seccion-tabla {
+    width: 60%;
+  }
 }
 
 .imgs {

@@ -1,5 +1,4 @@
-const productsContainer = document.querySelector('#productsContainer');
-const button = document.querySelectorAll('#eliminarBtn');
+const confirmModal = document.querySelector('#confirm-modal');
 const formAdd = document.querySelector('#form-add');
 const body = document.querySelector('#body');
 const loader = document.querySelector('#loader')
@@ -44,11 +43,13 @@ formAdd.addEventListener('submit', async (e) => {
 
 });
 
-productsContainer?.addEventListener('click', async (e) => {
-  const btn = e.target;
+confirmModal?.addEventListener('click', async (e) => {
   
-  if(btn.classList.contains('bi-trash-fill') || btn.classList.contains("btn-danger")){
-    const id = btn.dataset.id;
+  if(e.target.classList.contains('cancel-btn')) return;
+  
+  else if(e.target.classList.contains('conf-btn')){
+    
+    const id = document.querySelector('#btn-trash').dataset.id;
 
     try { 
       const res = await fetch(`/admin/${id}`, {method: "delete"})

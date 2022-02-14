@@ -2,6 +2,37 @@
   <%- include ('../layout/layout') %>
   <body>
     <div
+      class="modal fade"
+      id="confirm-modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content p-4">
+          <div class="modal-body text-center">
+            <h5>¿Seguro que deseas eliminar el registro?</h5>
+          </div>
+          <div class="pb-3 text-center">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-primary conf-btn"
+            >
+              Confirmar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary cancel-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
       class="d-none d-flex flex-column justify-content-center align-items-center h-100"
       id="loader"
     >
@@ -17,7 +48,7 @@
         <h1 class="p-4 me-3">Panel de administración</h1>
         <button
           type="button"
-          class="btn btn-primary ms-3"
+          class="buttons color-principal ms-3"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
@@ -81,7 +112,7 @@
           </div>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-5 ps-0 pe-0 seccion-tabla">
           <h2 class="mb-3">Lista de productos</h2>
           <hr />
           <% if (telas.length > 0) { %>
@@ -101,8 +132,8 @@
                 <td>
                   <% if (tela.imagenes.length > 0) { %>
                   <img
-                    width="60"
-                    height="50"
+                    width="40"
+                    height="30"
                     src="<%= tela.imagenes[0].url %>"
                     alt="<%= tela.nombre %>"
                     class="rounded-circle"
@@ -110,8 +141,8 @@
                   />
                   <% } else { %>
                   <img
-                    width="60"
-                    height="50"
+                    width="40"
+                    height="30"
                     src="/img/assets/desconocido.jpg"
                     alt="desconocido"
                     class="rounded-circle"
@@ -123,12 +154,18 @@
                 <td><%= tela.comp %></td>
                 <td>
                   <a href="/admin/tela/<%= tela._id %>"
-                    ><button class="btn btn-primary" id="editarBtn">
+                    ><button class="buttons color-principal" id="editarBtn">
                       <i class="bi bi-pencil-fill"></i></button
                   ></a>
                 </td>
                 <td>
-                  <button class="btn btn-danger" data-id="<%=tela._id %>">
+                  <button
+                    class="buttons btn-danger"
+                    id="btn-trash"
+                    data-id="<%=tela._id %>"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirm-modal"
+                  >
                     <i
                       class="bi bi-trash-fill"
                       id="eliminarBtn"
