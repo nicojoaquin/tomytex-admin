@@ -34,19 +34,17 @@ const getProduct = async () => {
           <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-nombre">Editar nombre</button>
         </div>
         <hr />
-        <section>
-          <div>
-            <h3>Composición:</h3>
-            <p class="fw-normal fs-5">${tela.comp}</p>
-            <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-comp">Editar composición</button>
-          </div>
-          <hr />
-          <div>
-            <h3>Descripción</h3>
-            <p class="fw-light tela-desc">${tela.desc}</p>
-            <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-desc">Editar descripción</button>
-          </div>
-        </section>
+        <div>
+          <h3>Composición:</h3>
+          <p class="fw-normal fs-5">${tela.comp}</p>
+          <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-comp">Editar composición</button>
+        </div>
+        <hr />
+        <div>
+          <h3>Descripción</h3> 
+          <p class="tela-desc">${tela.desc}</p>
+          <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-desc">Editar descripción</button>
+        </div>
         <hr />
         <article>
           <div id="delete-img" data-id=${tela._id}>
