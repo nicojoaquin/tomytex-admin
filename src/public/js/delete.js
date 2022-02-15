@@ -26,6 +26,7 @@ formAdd.addEventListener('submit', async (e) => {
   }
   
   try {
+
     startLoad();
     const res = await fetch('/admin', {
       method: "POST",
@@ -33,13 +34,26 @@ formAdd.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newTela)
-    })
-    await res.json();
+    });
+
+    const data = await res.json();
+    const err = document.querySelector('#add-err');
+    
+    if(data.ok) {
+      window.location.reload();
+    } else {
+      err.classList.remove('d-none');
+      err.textContent = data.errors[0].msg;
+      setTimeout(() => {
+        err.classList.add('d-none');
+      }, 7000);
+    }
+    
   } catch (err) {
-    console.warn(err);
+    console.warn(err.msg);
   } finally {
-    window.location.reload();
-  }
+    stopLoad();
+  } 
 
 });
 

@@ -23,11 +23,13 @@ const getProduct = async () => {
   try {
     startLoad();
     const res = await fetch(`/api/tela/${ID}`);
-    const {tela} = await res.json();
+    const data = await res.json();
+    const {tela} = data;
 
     contenedor.innerHTML = 
       `
         <div class="mt-3">
+          <h2 id="err" class= "text-center alert alert-danger d-none"></h2>
           <h2>Artículo: ${tela.nombre}</h2>
           <button class="buttons color-principal" data-bs-toggle="modal" data-bs-target="#modal-nombre">Editar nombre</button>
         </div>
@@ -58,16 +60,16 @@ const getProduct = async () => {
       document.querySelector('.grid').innerHTML += 
       `
         <div class="me-3 mt-3 card">
-          <img
-            src=${img.url}
-            alt=${tela.nombre}
-            class="card-img-top imgs"
-          />
-          <div class="card-body">
-            <button class="btn btn-danger mt-3" data-img="${img.public_id}">
+          <div class="p-3 text-end">
+            <button class="btn btn-danger" data-img="${img.public_id}">
               X
             </button>
           </div>
+          <img
+            src=${img.url}
+            alt=${tela.nombre}
+            class="imgs"
+          />
         </div>
       `
     })
@@ -87,8 +89,9 @@ window.onload = getProduct();
 const formText = document.querySelectorAll("#form-text");
 
 //Editar el nombre, la composición y la descripción
-const updateText = async (e) => {
+const updateValues = async (e, imagen) => {
   e.preventDefault()
+
   const {nombre, desc, comp, imagenes} = await getProduct()
 
   const nombreValue = document.querySelector('#nombre');
@@ -99,7 +102,8 @@ const updateText = async (e) => {
     nombre: nombreValue.value ?? nombre,
     desc: descValue.value ?? desc,
     comp: compValue.value ?? comp,
-    imagenes
+    imagenes,
+    imagen
   }
 
   try {
@@ -111,13 +115,21 @@ const updateText = async (e) => {
       },
       body: JSON.stringify(productToUpdate)
     });
+
     const data = await res.json();
+    const errorMessage = document.querySelector('#err');
+
     if (data.ok) {
-      getProduct();
+      getProduct();  
+      errorMessage.classList.add('d-none');
     } else {
-      alert(data.msg)
+      errorMessage.classList.remove('d-none');
+      errorMessage.textContent = data.errors[0].msg;
+      setTimeout(() => {
+        errorMessage.classList.add('d-none');
+      }, 5000);
     }
-    
+
   } catch (err) {
     console.warn(err);
   } finally {
@@ -127,7 +139,7 @@ const updateText = async (e) => {
 }
 
 formText.forEach(form => {
-  form.addEventListener('submit', updateText);
+  form.addEventListener('submit', updateValues);
 });
 
 
@@ -139,30 +151,11 @@ deleteImgBtn?.addEventListener('click', async (e) => {
   if(btn.classList.contains('btn-danger')) {
 
     const imagenUrl = btn.dataset.img;
-    const {imagenes} = await getProduct();
+    const {imagenes} = await getProduct()
     
     const imagen = imagenes.find( img => img.public_id === imagenUrl );
 
-    try { 
-      startLoad();
-      const res = await fetch(`/admin/${ID}`, {
-        method: "put",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({imagen})
-      });
-      const data = await res.json();
-      if (data.ok) {
-        getProduct();
-      } else {
-        alert(data.msg)
-      }
-    } catch (err) {
-        console.warn(err);
-    } finally {
-      stopLoad();
-    }
+    updateValues(e, imagen)
 
   }
 
@@ -185,12 +178,21 @@ formImg.addEventListener('submit', async (e) => {
       method: "put",
       body: formData
     });
+
     const data = await res.json();
+    const errorMessage = document.querySelector('#err');
+
     if (data.ok) {
       getProduct();
+      errorMessage.classList.add('d-none');
     } else {
-      alert(data.msg)
+      errorMessage.classList.remove('d-none');
+      errorMessage.textContent = data.msg;
+      setTimeout(() => {
+        errorMessage.classList.add('d-none');
+      }, 5000);
     }
+    
   } catch (err) {
       console.warn(err);
   } finally {

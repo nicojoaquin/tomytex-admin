@@ -14,7 +14,7 @@ const createProduct = async (req, res) => {
     })
   } catch (err) {
     res.status(500).json({
-      error: true,
+      ok: true,
       msg: err
     });
   }
@@ -48,7 +48,8 @@ const readProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
 
   const {id} = req.params;
-  const {imagen} = req.body
+
+  const {imagen, nombre, comp, desc} = req.body;
 
   const {imagenes} = await Tela.findById(id);
   
@@ -63,8 +64,10 @@ const updateProduct = async (req, res) => {
     await Tela.findByIdAndUpdate(
       id,
       {
-        ...req.body,
-        imagenes: newImgs
+        nombre,
+        comp,
+        desc,
+        imagenes: newImgs 
       },
       {
       new: true
