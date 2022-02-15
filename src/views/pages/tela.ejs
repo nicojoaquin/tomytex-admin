@@ -132,13 +132,13 @@
               <div class="modal-body">
                 <form id="form-text">
                   <label for="desc" class="form-label">Descripción</label>
-                  <input
+                  <textarea
                     id="desc"
                     class="form-control"
-                    type="text"
                     placeholder="Descripción"
-                    value="<%= tela.desc %> "
-                  />
+                  >
+                    <%= tela.desc %>
+                  </textarea>
                   <button
                     type="submit"
                     class="btn btn-success mt-3"

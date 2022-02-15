@@ -14,9 +14,9 @@ const router = Router();
 
 //POST
 router.post('/',
-  check('nombre', "El nombre es obligatorio").not().isEmpty(),
-  check('comp', "La composición es obligatoria").not().isEmpty(),
-  check('desc', "La descripción es obligatoria").not().isEmpty().isLength({min: 50}).withMessage('La descripción debe contener mas de 50 caracteres'),
+  check('nombre', "El nombre es obligatorio").trim().not().isEmpty(),
+  check('comp', "La composición es obligatoria").trim().not().isEmpty(),
+  check('desc', "La descripción es obligatoria").trim().not().isEmpty().isLength({min: 50}).withMessage('La descripción debe contener mas de 50 caracteres'),
   inputsValidator,
   createProduct
 );
@@ -29,9 +29,9 @@ router.get('/tela/:id', readProductById);
 
 // //PUT
 router.put('/:id',
-  check('nombre', "El nombre no puede estar vacio").not().isEmpty(),
-  check('comp', "La composición no puede estar vacia").not().isEmpty(),
-  check('desc', "La descripción no puede estar vacia").not().isEmpty().isLength({min: 50}).withMessage('La descripción debe contener mas de 50 caracteres'),
+  check('nombre', "El nombre no puede estar vacio").trim().not().isEmpty(),
+  check('comp', "La composición no puede estar vacia").trim().not().isEmpty(),
+  check('desc', "La descripción no puede estar vacia").trim().not().isEmpty().isLength({min: 50}).withMessage('La descripción debe contener mas de 50 caracteres'),
   inputsValidator,
   updateProduct
 );
