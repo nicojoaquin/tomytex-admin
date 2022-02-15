@@ -88,13 +88,6 @@ const updateProductImg = async (req, res) => {
 
   const {imagenes}  = await Tela.findById(id)
 
-  if(!img) {
-    return res.status(404).json({
-      ok: false,
-      msg: 'Por favor inserte una imagen'
-    })
-  }
-
   if(imagenes.length === 3) {
     return res.status(404).json({
       ok: false,

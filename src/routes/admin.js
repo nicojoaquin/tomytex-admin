@@ -7,6 +7,7 @@ const {
   updateProductImg,
   deleteProduct
 } = require('../controllers/admin');
+const { imageValidator } = require('../middlewares/validations');
 
 const router = Router();
 
@@ -23,7 +24,7 @@ router.get('/tela/:id', readProductById);
 router.put('/:id', updateProduct);
 
 //PUT
-router.put('/upload/:id', updateProductImg);
+router.put('/upload/:id', imageValidator, updateProductImg);
 
 // //DELETE
 router.delete('/:id', deleteProduct);
