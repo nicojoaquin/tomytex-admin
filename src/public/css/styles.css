@@ -7,6 +7,7 @@ body {
 .color-principal {
   background-color: rgb(56, 56, 212);
   color: #fff;
+  transition: all 0.3s ease;
 }
 .color-principal:hover {
   filter: brightness(80%);
@@ -19,9 +20,10 @@ body {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border: none;
   color: #fff;
+  transition: all 0.3s ease;
 }
 .buttons:hover {
-  filter: brightness(90%);
+  filter: brightness(80%);
   color: #fff;
 }
 
@@ -96,4 +98,25 @@ header h1 {
   word-wrap: break-word;
   inline-size: 60rem;
   width: 65%;
+}
+
+.form-login {
+  height: 30rem;
+  width: 50%;
+}
+@media (max-width: 767px) {
+  .form-login {
+    width: 90%;
+    height: 22rem;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .form-login {
+    width: 75%;
+    height: 25rem;
+  }
+}
+
+.hr-login {
+  border: 1px solid #fff;
 }

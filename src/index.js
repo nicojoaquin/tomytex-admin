@@ -42,6 +42,7 @@ cloudinaryConfig();
 //Routes
 app.use('/api', require('./routes/telas'));
 app.use('/admin', require('./routes/admin'));
+app.use('/auth', require('./routes/auth'));
 
 //Server
 const server = app.listen(process.env.PORT || 5000, () => {

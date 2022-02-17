@@ -3,6 +3,23 @@ const deleteImgBtn = document.getElementsByClassName('container')[0];
 const body = document.querySelector('#body');
 const loader = document.querySelector('#loader')
 
+let token;
+//Si no hay token en el storage se redirecciona al login
+const getToken = () => {
+  const tokenGetted = sessionStorage.getItem('token');
+  token = tokenGetted;
+  if(!token) {
+    window.location.href = '../login'
+  }
+}
+
+getToken();
+//Cerrar sesión
+document.querySelector('#signout').addEventListener('click', () => {
+  sessionStorage.removeItem('token');
+  window.location.href = '../login';
+ });
+
 //Loader spinner empieza
 const startLoad = () => {
   body.classList.add('d-none');

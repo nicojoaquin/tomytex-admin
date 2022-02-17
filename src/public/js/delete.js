@@ -3,6 +3,23 @@ const formAdd = document.querySelector('#form-add');
 const body = document.querySelector('#body');
 const loader = document.querySelector('#loader')
 
+let token;
+//Si no hay token en el storage se redirecciona al login
+const getToken = () => {
+  const tokenGetted = sessionStorage.getItem('token');
+  token = tokenGetted;
+  if(!token) {
+    window.location.href = 'admin/login'
+  }
+}
+
+getToken()
+//Cerrar sesión
+document.querySelector('#signout').addEventListener('click', () => {
+  sessionStorage.removeItem('token');
+ window.location.href = 'admin/login';
+});
+
 const startLoad = () => {
   body.classList.add('d-none');
   loader.classList.remove('d-none');

@@ -12,6 +12,11 @@ const {
 
 const router = Router();
 
+//Login
+router.get('/login', (req, res) => {
+  res.render('pages/login')
+})
+
 //POST
 router.post('/',
   check('nombre', "El nombre es obligatorio").trim().not().isEmpty(),
